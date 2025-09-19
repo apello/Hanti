@@ -1,207 +1,83 @@
 "use client";
 
+import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
+import AgentDetails from "@/app/components/auth/seller-flow/AgentDetails";
+import Email from "@/app/components/auth/seller-flow/Email";
+import FullName from "@/app/components/auth/seller-flow/FullName";
+import HomeAddress from "@/app/components/auth/seller-flow/HomeAddress";
+import HomeDetailsA from "@/app/components/auth/seller-flow/HomeDetailsA";
+import HomeDetailsB from "@/app/components/auth/seller-flow/HomeDetailsB";
+import PhoneNumber from "@/app/components/auth/seller-flow/PhoneNumber";
+import SellingTimeline from "@/app/components/auth/seller-flow/SellingTimeline";
+import { HomeInfo, UserInfo } from "@/types";
 import { ReactNode, useEffect, useState } from "react";
 
-// TODO: Make standard home profile type instead of generic Record
-// type userProfile = {
-//     address: string;
-//     movingDetails: string;
-// }
 
-const QuestionaireFlow = ({ children }: { children: ReactNode[] }) => {
-    const [count, setCount] = useState(1);
-    const [isMounted, setIsMounted] = useState(false);
+// TODO: Add Zod validation to all questionaire forms
+export default function SellerFlow() {
+    const [userProfile, setUserProfile] = useState<UserInfo>({
+        sellerEmail: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+    });
 
+    const [homeProfile, setHomeProfile] = useState<HomeInfo>({
+        homeAddress: "",
+        agentDetails: 0,
+        timeline: "",
+        squareFootage: 0,
+        yearBuilt: 0,
+        bedrooms: 0,
+        fullBathrooms: 0,
+        threeFourthBathrooms: 0,
+        oneHalfBathrooms: 0,
+        floors: 0,
+        hasPool: "",
+        parkingSpaces: 0,
+        gatedCommunity: "",
+        hasBasement: "",
+        poolType: "",
+        basementSquareFootage: undefined,
+    });
+
+    // Grab stored data if page is refreshed
     useEffect(() => {
-        setIsMounted(true); 
-        const saved = localStorage.getItem("questionaire-step");
-        if (saved) setCount(Number(saved));
+        const savedUser = localStorage.getItem("sellerUserProfile");
+        if (savedUser) setUserProfile(JSON.parse(savedUser));
+
+        const savedHome = localStorage.getItem("sellerHomeProfile");
+        if (savedHome) setHomeProfile(JSON.parse(savedHome));
     }, []);
 
+    // Stored data in case page is refreshed
     useEffect(() => {
-        if (isMounted) {
-            localStorage.setItem("questionaire-step", String(count));
-        }
-    }, [count, isMounted]);
+        localStorage.setItem("sellerUserProfile", JSON.stringify(userProfile));
+    }, [userProfile]);
 
-    const decrementCount = () => setCount((c) => Math.max(1, c - 1));
-    const incrementCount = () => setCount((c) => Math.min(children.length, c + 1));
-
-    if (!isMounted) {
-        return <div>Loading...</div>;
-    }
-    
-    return (
-    <div>
-        <div>{children[count - 1]}</div>
-        <div style={{ display: "flex", gap: 8 }}>
-        Step {count} / {children.length}
-        {count > 1 && <button onClick={decrementCount}>Back</button>}
-        {count < children.length && <button onClick={incrementCount}>Next</button>}
-        </div>
-    </div>
-    );
-};
-
-const HomeAddress = ({
-  userProfile,
-  setUserProfile,
-}: {
-  userProfile: Record<string, string>;
-  setUserProfile: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-}) => {
-  return (
-    <div>
-      <h1>Tell us about your home:</h1>
-      <h3>First, enter the address of the home:</h3>
-      <input
-        type="text"
-        value={userProfile.homeAddress || ""}
-        onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, homeAddress: e.target.value }))
-        }
-      />
-    </div>
-  );
-};
-
-const MovingDetails = ({
-  userProfile,
-  setUserProfile,
-}: {
-  userProfile: Record<string, string>;
-  setUserProfile: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-}) => {
-  return (
-    <div>
-      <h1>Before we get started, do any of these apply to you?</h1>
-      <h3>
-        We may be required to share your selling options with your agent if an
-        agreement has been signed.
-      </h3>
-      <input
-        type="text"
-        value={userProfile.movingDetails || ""}
-        onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, movingDetails: e.target.value }))
-        }
-      />
-    </div>
-  );
-};
-
-const Email = ({
-  userProfile,
-  setUserProfile,
-}: {
-  userProfile: Record<string, string>;
-  setUserProfile: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-}) => {
-  return (
-    <div>
-      <h1>What's your email?</h1>
-      <h3>Sign in or create an account to view your selling options:</h3>
-
-      <label>Email</label>
-      <input
-        type="text"
-        value={userProfile.sellerEmail || ""}
-        onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, sellerEmail: e.target.value }))
-        }
-      />
-    </div>
-  );
-};
-
-const FullName = ({
-  userProfile,
-  setUserProfile,
-}: {
-  userProfile: Record<string, string>;
-  setUserProfile: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-}) => {
-  return (
-    <div>
-      <h1>What's your name?</h1>
-
-      <label>First Name</label>
-      <input
-        type="text"
-        value={userProfile.firstName || ""}
-        onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, firstName: e.target.value }))
-        }
-      /> 
-
-      <br/>
-
-      <label>Last Name</label>
-      <input
-        type="text"
-        value={userProfile.lastName || ""}
-        onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, lastName: e.target.value }))
-        }
-      />
-    </div>
-  );
-};
-
-
-const PhoneNumber = ({
-  userProfile,
-  setUserProfile,
-}: {
-  userProfile: Record<string, string>;
-  setUserProfile: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-}) => {
-  return (
-    <div>
-      <h1>What's your name?</h1>
-      <h3>We'll send you a text so you can get help when you're ready.</h3>
-
-      <label>Phone</label>
-      <input
-        type="text"
-        value={userProfile.phoneNumber || ""}
-        onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, phoneNumber: e.target.value }))
-        }
-      />
-    </div>
-  );
-};
-
-
-
-export default function SellerFlow() {
-  const [userProfile, setUserProfile] = useState<Record<string, string>>({});
-
-  // Load saved userProfile on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("userProfile");
-    if (saved) setUserProfile(JSON.parse(saved));
-  }, []);
-
-  // Save userProfile on change
-  useEffect(() => {
-    localStorage.setItem("userProfile", JSON.stringify(userProfile));
-  }, [userProfile]);
+    useEffect(() => {
+        localStorage.setItem("sellerHomeProfile", JSON.stringify(homeProfile));
+    }, [homeProfile]);
 
   return (
     <div>
       <h1>Seller flow</h1>
       <QuestionaireFlow>
-        <HomeAddress userProfile={userProfile} setUserProfile={setUserProfile} />
-        <MovingDetails userProfile={userProfile} setUserProfile={setUserProfile} />
+        <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+        <AgentDetails homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+        <SellingTimeline homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+        <HomeDetailsA homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+        <HomeDetailsB homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <Email userProfile={userProfile} setUserProfile={setUserProfile} />
         <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
         <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
       </QuestionaireFlow>
 
-      <h4>Current Information: </h4> <br/>
+      <h4>Current User Info: </h4>
       <p>{JSON.stringify(userProfile)}</p>
+
+      <h4>Current Home Info: </h4>
+      <p>{JSON.stringify(homeProfile)}</p>
     </div>
   );
 }
