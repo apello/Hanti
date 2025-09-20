@@ -14,11 +14,9 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL
 );
-
 -- Create index for faster lookups
 CREATE INDEX idx_users_username ON users(username);
 CREATE INDEX idx_users_email ON users(email);
-
 -- Insert some test data
 INSERT INTO users (username, email, password_hash) VALUES 
 ('abdi', 'abdi@gmail.com', '$2b$10$rQZ8K9vL8K9vL8K9vL8K9O'),
