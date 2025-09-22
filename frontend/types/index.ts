@@ -27,3 +27,9 @@ export type HomeInfo = {
     poolType: "above ground" | "in ground" | string;
     basementSquareFootage?: number; // optional since it might be empty
 };
+
+// Seller form data
+export type SellerFlowData = {
+  userInfo: UserInfo;
+  homeInfo: HomeInfo;
+};
