@@ -62,8 +62,10 @@ export default function SimpleAuth() {
 
     const handleComplete = async () => {
         try {
+            // Simple session storage
             const timestamp = new Date().toISOString();
 
+            // Log the credentials for backend
             if (isSignUp) {
                 console.log("Simple Auth - Sign Up Payload:", {
                     email: formData.email,
@@ -82,6 +84,7 @@ export default function SimpleAuth() {
                 });
             }
 
+            // Store user session
             localStorage.setItem("userSession", JSON.stringify(
                 isSignUp
                     ? {
@@ -98,6 +101,7 @@ export default function SimpleAuth() {
                     }
             ));
 
+            // Redirect to home
             router.push("/");
         } catch (error) {
             console.error("Auth error:", error);
@@ -148,7 +152,7 @@ export default function SimpleAuth() {
                         password={formData.password}
                         setPassword={(password) => setFormData({ ...formData, password })}
                     />
-                    <p>Don't have an account? <a href="#" onClick={(e) => { e.preventDefault(); chooseSignUp(); }}>Sign up</a></p>
+                    <p>Don&apos;t have an account? <a href="#" onClick={(e) => { e.preventDefault(); chooseSignUp(); }}>Sign up</a></p>
                 </div>
             )}
 
@@ -162,19 +166,6 @@ export default function SimpleAuth() {
                 </button>
             )}
 
-            {isSignUp && (
-                <>
-                    <h4>Current Auth Data:</h4>
-                    <p>{JSON.stringify(formData)}</p>
-                </>
-            )}
-
-            {!isSignUp && (
-                <>
-                    <h4>Current Auth Data:</h4>
-                    <p>{JSON.stringify({ email: formData.email, password: formData.password })}</p>
-                </>
-            )}
         </div>
     );
 }

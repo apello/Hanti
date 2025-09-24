@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "../../../../../backend/supabase/server";
+import { supabase } from "../../../../backend/supabase/server";
 
 // GET all users
 export async function GET() {
@@ -17,3 +17,4 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
   }
 }
+

@@ -1,10 +1,8 @@
 import { SellerFlowData } from "@/types";
 import { useEffect, useState, ReactNode } from "react";
 
-const QuestionaireFlow = ({ children, route, formData }: {
+const QuestionaireFlow = ({ children }: {
   children: ReactNode[];
-  route: string;
-  formData: SellerFlowData;
 }) => {
   const [count, setCount] = useState(1);
   const [isMounted, setIsMounted] = useState(false);

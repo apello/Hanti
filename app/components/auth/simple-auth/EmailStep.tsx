@@ -20,7 +20,7 @@ const EmailStep = ({
                 required
             />
             {showSignUpLink && (
-                <p>Don't have an account? <a href="#" onClick={(e) => { e.preventDefault(); onSignUpClick && onSignUpClick(); }}>Sign up</a></p>
+                <p>Don&apos;t have an account? <a href="#" onClick={(e) => { e.preventDefault(); onSignUpClick && onSignUpClick(); }}>Sign up</a></p>
             )}
         </div>
     );
