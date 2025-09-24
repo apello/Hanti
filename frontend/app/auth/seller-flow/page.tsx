@@ -13,7 +13,7 @@ import { HomeInfo, SellerFlowData, UserInfo } from "@/types";
 import { useEffect, useState } from "react";
 
 // TODO: Add Zod validation to all questionaire forms
-export default function SellerFlow() {
+export default function SellerFlow() {  
   const [userProfile, setUserProfile] = useState<UserInfo>({
     sellerEmail: "",
     firstName: "",
@@ -58,7 +58,17 @@ export default function SellerFlow() {
     localStorage.setItem("sellerHomeProfile", JSON.stringify(homeProfile));
   }, [homeProfile]);
 
-  const fornData: SellerFlowData = {
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch("/api/auth/seller-flow");
+      const data = await response.json();
+      console.log(data)
+    }
+
+    fetchUsers();
+  })
+
+  const formData: SellerFlowData = {
     userInfo: userProfile,
     homeInfo: homeProfile,
   };
@@ -66,7 +76,7 @@ export default function SellerFlow() {
   return (
     <div>
       <h1>Seller flow</h1>
-      <QuestionaireFlow route="/api/auth/seller-flow" formData={fornData}>
+      <QuestionaireFlow route="/api/auth/seller-flow" formData={formData}>
         <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <AgentDetails homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <SellingTimeline homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
