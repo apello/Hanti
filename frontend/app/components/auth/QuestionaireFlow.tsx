@@ -1,7 +1,7 @@
 import { SellerFlowData } from "@/types";
 import { useEffect, useState, ReactNode } from "react";
 
-const QuestionaireFlow = ({children, route, formData}: {
+const QuestionaireFlow = ({ children, route, formData }: {
   children: ReactNode[];
   route: string;
   formData: SellerFlowData;
@@ -32,7 +32,7 @@ const QuestionaireFlow = ({children, route, formData}: {
   };
 
   const handleSubmit = async () => {
-    
+
   };
 
   if (!isMounted) {
@@ -48,13 +48,15 @@ const QuestionaireFlow = ({children, route, formData}: {
         }}
       >
         <div>{children[count - 1]}</div>
-        
+
         <input
           type="submit"
           value={count < children.length ? "Next" : "Submit"}
         />
       </form>
 
+      {count > 1 && <button onClick={decrementCount}>Back</button>}
+      Step {count} / {children.length}
       {count > 1 && <button onClick={decrementCount}>Back</button>}
       Step {count} / {children.length}
     </>

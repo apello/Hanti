@@ -1,3 +1,25 @@
+// Authentication types
+export type AuthUser = {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    isLoggedIn: boolean;
+    loginTime: string;
+};
+
+export type LoginCredentials = {
+    email: string;
+    password: string;
+};
+
+export type SignupData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+};
+
 // Seller User Info type
 export type UserInfo = {
     sellerEmail: string;
