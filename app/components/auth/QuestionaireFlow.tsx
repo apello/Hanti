@@ -1,9 +1,8 @@
-import { SellerFlowData } from "@/types";
 import { useEffect, useState, ReactNode } from "react";
 
-const QuestionaireFlow = ({ children, onSubmit }: {
+const QuestionaireFlow = ({ children, setFormSubmitted }: {
   children: ReactNode[];
-  onSubmit?: () => void;
+  setFormSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [count, setCount] = useState(1);
   const [isMounted, setIsMounted] = useState(false);
@@ -22,10 +21,17 @@ const QuestionaireFlow = ({ children, onSubmit }: {
 
   const decrementCount = () => setCount((c) => Math.max(1, c - 1));
 
-  const handleSubmit = async () => {
-    if (onSubmit) {
-      onSubmit();
+  const handleNext = () => {
+    if (count < children.length) {
+      setCount((c) => c + 1);
+    } else {
+      handleSubmit();
     }
+  };
+
+  const handleSubmit = async () => {
+    localStorage.removeItem("questionaire-step");
+    setFormSubmitted(true);
   };
 
   if (!isMounted) {
@@ -37,11 +43,7 @@ const QuestionaireFlow = ({ children, onSubmit }: {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (count < children.length) {
-            setCount((c) => c + 1);
-          } else {
-            handleSubmit();
-          }
+          handleNext();
         }}
       >
         <div>{children[count - 1]}</div>

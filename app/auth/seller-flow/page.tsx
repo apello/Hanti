@@ -13,7 +13,9 @@ import { HomeInfo, UserInfo } from "@/types";
 import { useEffect, useState } from "react";
 
 // TODO: Add Zod validation to all questionaire forms
-export default function SellerFlow() {  
+export default function SellerFlow() {
+  const [formSubmitted, setFormSubmitted]= useState(false);
+  
   const [userProfile, setUserProfile] = useState<UserInfo>({
     sellerEmail: "",
     firstName: "",
@@ -58,20 +60,33 @@ export default function SellerFlow() {
     localStorage.setItem("sellerHomeProfile", JSON.stringify(homeProfile));
   }, [homeProfile]);
 
+
+  // Submit form
   useEffect(() => {
-    const fetchUsers = async () => {
+    const registerUser = async () => {
+      // Remove stored cookies
+      localStorage.removeItem("sellerUserProfile");
+      localStorage.removeItem("sellerHomeProfile");
+
       const response = await fetch("/api/auth/seller-flow");
       const data = await response.json();
       console.log(data)
     }
 
-    fetchUsers();
-  })
+    // const createListing = async () => {
+
+    // };
+
+    // const pushData = async () =>  Promise.race([registerUser(), createListing()]);
+
+    if(formSubmitted) registerUser();
+
+  }, [formSubmitted])
 
   return (
     <div>
       <h1>Seller flow</h1>
-      <QuestionaireFlow>
+      <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
         <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <AgentDetails homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <SellingTimeline homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
