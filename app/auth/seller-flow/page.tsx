@@ -1,6 +1,6 @@
 "use client";
 
-import LocationStep from "@/app/components/auth/simple-auth/LocationStep";
+import LocationStep from "@/app/components/auth/simple-auth/Location";
 import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
 import Email from "@/app/components/auth/seller-flow/Email";
 import FullName from "@/app/components/auth/seller-flow/FullName";
@@ -15,8 +15,8 @@ import PasswordStep from "@/app/components/auth/simple-auth/PasswordStep";
 
 // TODO: Add Zod validation to all questionaire forms
 export default function SellerFlow() {
-  const [formSubmitted, setFormSubmitted]= useState(false);
-  
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const [userProfile, setUserProfile] = useState<User>({
     email: "",
     password: "",
@@ -90,7 +90,7 @@ export default function SellerFlow() {
       }
     };
 
-    if(formSubmitted) registerUser();
+    if (formSubmitted) registerUser();
 
   }, [formSubmitted, userProfile])
 

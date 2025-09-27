@@ -3,13 +3,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import EmailStep from "@/app/components/auth/simple-auth/EmailStep";
-import PasswordStep from "@/app/components/auth/simple-auth/PasswordStep";
+import EmailStep from "@/app/components/auth/simple-auth/Email";
+import PasswordStep from "@/app/components/auth/simple-auth/Password";
+import { User } from "@/types/schema";
 
 export default function LoginPage() {
-    const [formData, setFormData] = useState({
+    const [userProfile, setUserProfile] = useState<User>({
         email: "",
-        password: ""
+        phoneNumber: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        role: "buyer",
+        location: ""
     });
 
     const router = useRouter();
@@ -21,8 +27,8 @@ export default function LoginPage() {
 
             // Log the credentials for backend
             console.log("Login Payload:", {
-                email: formData.email,
-                password: formData.password,
+                email: userProfile.email,
+                password: userProfile.password,
                 timestamp,
             });
 
@@ -56,20 +62,20 @@ export default function LoginPage() {
 
                 <div className="space-y-6">
                     <EmailStep
-                        email={formData.email}
-                        setEmail={(email) => setFormData({ ...formData, email })}
+                        userProfile={userProfile}
+                        setUserProfile={setUserProfile}
                         onSignUpClick={() => router.push("/auth/signup-flow")}
                         showSignUpLink={false}
                     />
 
                     <PasswordStep
-                        password={formData.password}
-                        setPassword={(password) => setFormData({ ...formData, password })}
+                        userProfile={userProfile}
+                        setUserProfile={setUserProfile}
                     />
 
                     <button
                         onClick={handleLogin}
-                        disabled={!formData.email || !formData.password}
+                        disabled={!userProfile.email || !userProfile.password}
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                         Sign In
