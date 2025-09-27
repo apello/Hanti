@@ -1,9 +1,10 @@
 // ========== USERS ==========
 
 export interface User {
-  id?: number;       // PK
+  id?: string;          // Supabase Auth UUID (from auth.users)
+  userId?: number;      // Your custom user ID (from public.users table)
   email: string;        // unique
-  password: string; // store hashed password
+  password?: string;    // Only needed for forms, not stored in public.users
   created_at?: string;
   updated_at?: string;
   phoneNumber?: string; // QUESTION MARK MEANS NOT REQUIRED
@@ -11,6 +12,7 @@ export interface User {
   location: string;
   firstName: string;
   lastName: string;
+  auth_id?: string;     // Reference to Supabase auth.users.id
 }
 
 export interface PropertyListing {

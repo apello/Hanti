@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import Email from "@/app/components/auth/simple-auth/Email";
 import Password from "@/app/components/auth/simple-auth/Password";
 import { User } from "@/types/schema";
@@ -10,32 +10,43 @@ import { User } from "@/types/schema";
 export default function LoginPage() {
     const [userProfile, setUserProfile] = useState<User>({
         email: "",
-        phoneNumber: "",
         password: "",
         firstName: "",
         lastName: "",
         role: "buyer",
         location: ""
     });
-
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const router = useRouter();
 
     const handleLogin = async () => {
         try {
-            // Simple session storage
-            const timestamp = new Date().toISOString();
+            setLoading(true);
+            setError("");
 
-            // Log the credentials for backend
-            console.log("Login Payload:", {
+            // Sign in with Supabase Auth
+            const { data, error: authError } = await supabase.auth.signInWithPassword({
                 email: userProfile.email,
-                password: userProfile.password,
-                timestamp,
+                password: userProfile.password || "",
             });
 
-            // Redirect to home
-            router.push("/");
+            if (authError) {
+                setError(authError.message);
+                return;
+            }
+
+            if (data.user) {
+                console.log("Login successful:", data.user);
+                // Redirect to home or dashboard
+                router.push("/");
+            }
+
         } catch (error) {
             console.error("Login error:", error);
+            setError("An unexpected error occurred");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,6 +71,12 @@ export default function LoginPage() {
                     </p>
                 </div>
 
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                        {error}
+                    </div>
+                )}
+
                 <div className="space-y-6">
                     <Email
                         userProfile={userProfile}
@@ -75,10 +92,10 @@ export default function LoginPage() {
 
                     <button
                         onClick={handleLogin}
-                        disabled={!userProfile.email || !userProfile.password}
+                        disabled={!userProfile.email || !userProfile.password || loading}
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
-                        Sign In
+                        {loading ? "Signing in..." : "Sign In"}
                     </button>
                 </div>
             </div>
