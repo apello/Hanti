@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import EmailStep from "@/app/components/auth/simple-auth/Email";
-import PasswordStep from "@/app/components/auth/simple-auth/Password";
+import Email from "@/app/components/auth/simple-auth/Email";
+import Password from "@/app/components/auth/simple-auth/Password";
 import { User } from "@/types/schema";
 
 export default function LoginPage() {
@@ -61,14 +61,14 @@ export default function LoginPage() {
                 </div>
 
                 <div className="space-y-6">
-                    <EmailStep
+                    <Email
                         userProfile={userProfile}
                         setUserProfile={setUserProfile}
                         onSignUpClick={() => router.push("/auth/signup-flow")}
                         showSignUpLink={false}
                     />
 
-                    <PasswordStep
+                    <Password
                         userProfile={userProfile}
                         setUserProfile={setUserProfile}
                     />

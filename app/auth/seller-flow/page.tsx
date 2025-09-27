@@ -1,6 +1,6 @@
 "use client";
 
-import LocationStep from "@/app/components/auth/simple-auth/Location";
+import Location from "@/app/components/auth/simple-auth/Location";
 import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
 import Email from "@/app/components/auth/seller-flow/Email";
 import FullName from "@/app/components/auth/seller-flow/FullName";
@@ -11,7 +11,7 @@ import PhoneNumber from "@/app/components/auth/seller-flow/PhoneNumber";
 import SellingTimeline from "@/app/components/auth/seller-flow/SellingTimeline";
 import { User, PropertyListing } from "@/types/schema";
 import { useEffect, useState } from "react";
-import PasswordStep from "@/app/components/auth/simple-auth/PasswordStep";
+import Password from "@/app/components/auth/simple-auth/Password";
 
 // TODO: Add Zod validation to all questionaire forms
 export default function SellerFlow() {
@@ -99,7 +99,7 @@ export default function SellerFlow() {
       <h1>Seller flow</h1>
       <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
         <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
-        <LocationStep userProfile={userProfile} setUserProfile={setUserProfile} />
+        <Location userProfile={userProfile} setUserProfile={setUserProfile} />
         {/* <AgentDetails homeProfile={homeProfile} setHomeProfile={setHomeProfile} /> */}
         <SellingTimeline homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <HomeDetailsA homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
@@ -107,7 +107,7 @@ export default function SellerFlow() {
         <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
         <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
         <Email userProfile={userProfile} setUserProfile={setUserProfile} />
-        <PasswordStep userProfile={userProfile} setUserProfile={setUserProfile} />
+        <Password userProfile={userProfile} setUserProfile={setUserProfile} />
       </QuestionaireFlow>
 
       <h4>Current User Info: </h4>

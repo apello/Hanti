@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
-import PurposeStep from "@/app/components/auth/simple-auth/Purpose";
-import LocationStep from "@/app/components/auth/simple-auth/Location";
-import EmailStep from "@/app/components/auth/simple-auth/Email";
-import PasswordStep from "@/app/components/auth/simple-auth/Password";
-import NameStep from "@/app/components/auth/simple-auth/Name";
+import Purpose from "@/app/components/auth/simple-auth/Purpose";
+import Location from "@/app/components/auth/simple-auth/Location";
+import Email from "@/app/components/auth/simple-auth/Email";
+import Password from "@/app/components/auth/simple-auth/Password";
+import Name from "@/app/components/auth/simple-auth/Name";
 import { User } from "@/types/schema";
 
 export default function SignupPage() {
@@ -62,11 +62,11 @@ export default function SignupPage() {
         <div>
             <h1>Signup flow</h1>
             <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
-                <PurposeStep userProfile={userProfile} setUserProfile={setUserProfile} />
-                <LocationStep userProfile={userProfile} setUserProfile={setUserProfile} />
-                <NameStep userProfile={userProfile} setUserProfile={setUserProfile} />
-                <EmailStep userProfile={userProfile} setUserProfile={setUserProfile} />
-                <PasswordStep userProfile={userProfile} setUserProfile={setUserProfile} />
+                <Purpose userProfile={userProfile} setUserProfile={setUserProfile} />
+                <Location userProfile={userProfile} setUserProfile={setUserProfile} />
+                <Name userProfile={userProfile} setUserProfile={setUserProfile} />
+                <Email userProfile={userProfile} setUserProfile={setUserProfile} />
+                <Password userProfile={userProfile} setUserProfile={setUserProfile} />
 
             </QuestionaireFlow>
 
