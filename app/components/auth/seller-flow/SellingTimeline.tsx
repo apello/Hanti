@@ -1,11 +1,11 @@
-import { HomeInfo } from "@/types";
+import { PropertyListing } from "@/types/schema";
 
 const SellingTimeline = ({
   homeProfile,
   setHomeProfile,
 }: {
-  homeProfile: HomeInfo;
-  setHomeProfile: React.Dispatch<React.SetStateAction<HomeInfo>>;
+  homeProfile: PropertyListing;
+  setHomeProfile: React.Dispatch<React.SetStateAction<PropertyListing>>;
 }) => {
   return (
     <div>

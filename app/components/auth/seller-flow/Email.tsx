@@ -1,12 +1,12 @@
-import { UserInfo } from "@/types";
+import { User } from "@/types/schema";
 
 
 const Email = ({
   userProfile,
   setUserProfile,
 }: {
-  userProfile: UserInfo;
-  setUserProfile: React.Dispatch<React.SetStateAction<UserInfo>>;
+  userProfile: User;
+  setUserProfile: React.Dispatch<React.SetStateAction<User>>;
 }) => {
   return (
     <div>
@@ -16,9 +16,9 @@ const Email = ({
       <label>Email</label>
       <input
         type="email"
-        value={userProfile.sellerEmail || ""}
+        value={userProfile.email || ""}
         onChange={(e) =>
-          setUserProfile((prev) => ({ ...prev, sellerEmail: e.target.value }))
+          setUserProfile((prev) => ({ ...prev, email: e.target.value }))
         }
         required
       />

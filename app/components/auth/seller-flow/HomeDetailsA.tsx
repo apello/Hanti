@@ -1,11 +1,11 @@
-import { HomeInfo } from "@/types";
+import { PropertyListing } from "@/types/schema";
 
 const HomeDetailsA = ({
   homeProfile,
   setHomeProfile,
 }: {
-  homeProfile: HomeInfo;
-  setHomeProfile: React.Dispatch<React.SetStateAction<HomeInfo>>;
+  homeProfile: PropertyListing;
+  setHomeProfile: React.Dispatch<React.SetStateAction<PropertyListing>>;
 }) => {
     // TODO: Need year format check, need a counter component with plus minus btn
     
@@ -54,13 +54,19 @@ const HomeDetailsA = ({
 
             <br />
 
-            <label>Full Bathrooms (Full bathrooms are ...)</label>
+           <label>Full Bathrooms (Full bathrooms are ...)</label>
             <input
                 type="number"
-                value={homeProfile.fullBathrooms || ""}
+                value={homeProfile.bathrooms.full || ""}
                 onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    setHomeProfile((prev) => ({ ...prev, fullBathrooms: value }))
+                    const value = parseInt(e.target.value) || 0;
+                    setHomeProfile((prev) => ({
+                        ...prev,
+                        bathrooms: {
+                            ...prev.bathrooms,
+                            full: value,
+                        },
+                    }));
                 }}
                 required
             />
@@ -69,10 +75,16 @@ const HomeDetailsA = ({
             <label>3/4 Bathrooms (3/4 bathrooms are ...)</label>
             <input
                 type="number"
-                value={homeProfile.threeFourthBathrooms || ""}
-                onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    setHomeProfile((prev) => ({ ...prev, threeFourthBathrooms: value }))
+                value={homeProfile.bathrooms.threeQuarter || ""}
+                 onChange={(e) => {
+                    const value = parseInt(e.target.value) || 0;
+                    setHomeProfile((prev) => ({
+                        ...prev,
+                        bathrooms: {
+                            ...prev.bathrooms,
+                            threeQuarter: value,
+                        },
+                    }));
                 }}
                 required
             />
@@ -81,10 +93,16 @@ const HomeDetailsA = ({
             <label>1/2 Bathrooms (1/2 bathrooms are ...)</label>
             <input
                 type="number"
-                value={homeProfile.oneHalfBathrooms || ""}
+                value={homeProfile.bathrooms.half || ""}
                 onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    setHomeProfile((prev) => ({ ...prev, oneHalfBathrooms: value }))
+                    const value = parseInt(e.target.value) || 0;
+                    setHomeProfile((prev) => ({
+                        ...prev,
+                        bathrooms: {
+                            ...prev.bathrooms,
+                            half: value,
+                        },
+                    }));
                 }}
                 required
             />

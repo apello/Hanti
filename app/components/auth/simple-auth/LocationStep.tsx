@@ -1,9 +1,11 @@
+import { User } from "@/types/schema";
+
 const LocationStep = ({
-  location,
-  setLocation,
+  userProfile,
+  setUserProfile,
 }: {
-  location: string;
-  setLocation: (location: string) => void;
+    userProfile: User;
+    setUserProfile: React.Dispatch<React.SetStateAction<User>>;
 }) => {
   return (
     <div>
@@ -13,8 +15,8 @@ const LocationStep = ({
       <label>City, State, or ZIP code</label>
       <input
         type="text"
-        value={location || ""}
-        onChange={(e) => setLocation(e.target.value)}
+        value={userProfile.location || ""}
+        onChange={(e) => setUserProfile((prev) => ({ ...prev, location: e.target.value }))}
         placeholder="e.g., New York, NY or 10001"
         required
       />

@@ -1,12 +1,12 @@
-import { HomeInfo } from "@/types";
+import { PropertyListing } from "@/types/schema";
 
 
 const HomeAddress = ({
   homeProfile,
   setHomeProfile,
 }: {
-  homeProfile: HomeInfo;
-  setHomeProfile: React.Dispatch<React.SetStateAction<HomeInfo>>;
+  homeProfile: PropertyListing;
+  setHomeProfile: React.Dispatch<React.SetStateAction<PropertyListing>>;
 }) => {
   return (
     <div>
@@ -14,9 +14,9 @@ const HomeAddress = ({
       <h3>First, enter the address of the home:</h3>
       <input
         type="text"
-        value={homeProfile.homeAddress || ""}
+        value={homeProfile.address || ""}
         onChange={(e) =>
-          setHomeProfile((prev) => ({ ...prev, homeAddress: e.target.value }))
+          setHomeProfile((prev) => ({ ...prev, address: e.target.value }))
         }
         required
       />

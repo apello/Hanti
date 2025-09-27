@@ -1,11 +1,11 @@
-import { HomeInfo } from "@/types";
+import { PropertyListing } from "@/types/schema";
 
 const HomeDetailsB = ({
   homeProfile,
   setHomeProfile,
 }: {
-  homeProfile: HomeInfo;
-  setHomeProfile: React.Dispatch<React.SetStateAction<HomeInfo>>;
+  homeProfile: PropertyListing;
+  setHomeProfile: React.Dispatch<React.SetStateAction<PropertyListing>>;
 }) => {
   return (
     <div>
@@ -107,9 +107,9 @@ const HomeDetailsB = ({
 
       <label>Gated Community?</label>
       <select
-        value={homeProfile.gatedCommunity || ""}
+        value={homeProfile.isGatedCommunity || ""}
         onChange={(e) => 
-          setHomeProfile((prev) => ({ ...prev, gatedCommunity: e.target.value }))
+          setHomeProfile((prev) => ({ ...prev, isGatedCommunity: e.target.value }))
         }
         required
       >

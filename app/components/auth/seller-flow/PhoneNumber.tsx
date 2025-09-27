@@ -1,12 +1,12 @@
-import { UserInfo } from "@/types";
+import { User } from "@/types/schema";
 
 
 const PhoneNumber = ({
   userProfile,
   setUserProfile,
 }: {
-    userProfile: UserInfo;
-    setUserProfile: React.Dispatch<React.SetStateAction<UserInfo>>;
+    userProfile: User;
+    setUserProfile: React.Dispatch<React.SetStateAction<User>>;
 }) => {
   return (
     <div>
