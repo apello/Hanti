@@ -1,14 +1,16 @@
 // ========== USERS ==========
 
 export interface User {
-  userId?: number;       // PK
+  id?: number;       // PK
   email: string;        // unique
-  phoneNumber?: string; // QUESTION MARK MEANS NOT REQUIRED
   password: string; // store hashed password
-  firstName: string;
-  lastName: string;
+  created_at?: string;
+  updated_at?: string;
+  phoneNumber?: string; // QUESTION MARK MEANS NOT REQUIRED
   role: "buyer" | "seller" | "agent";
   location: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface PropertyListing {

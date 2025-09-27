@@ -11,6 +11,7 @@ import PhoneNumber from "@/app/components/auth/seller-flow/PhoneNumber";
 import SellingTimeline from "@/app/components/auth/seller-flow/SellingTimeline";
 import { User, PropertyListing } from "@/types/schema";
 import { useEffect, useState } from "react";
+import PasswordStep from "@/app/components/auth/simple-auth/PasswordStep";
 
 // TODO: Add Zod validation to all questionaire forms
 export default function SellerFlow() {
@@ -18,12 +19,12 @@ export default function SellerFlow() {
   
   const [userProfile, setUserProfile] = useState<User>({
     email: "",
-    phoneNumber: "",
     password: "",
+    phoneNumber: "",
+    role: "seller",
+    location: "",
     firstName: "",
     lastName: "",
-    role: "seller",
-    location: ""
   });
 
   const [homeProfile, setHomeProfile] = useState<PropertyListing>({
@@ -65,29 +66,33 @@ export default function SellerFlow() {
     localStorage.setItem("sellerHomeProfile", JSON.stringify(homeProfile));
   }, [homeProfile]);
 
-
   // Submit form
   useEffect(() => {
     const registerUser = async () => {
+      try {
+        // Clear local storage
+        localStorage.removeItem("sellerUserProfile");
+        localStorage.removeItem("sellerHomeProfile");
 
-       // Remove stored cookies
-      localStorage.removeItem("sellerUserProfile");
-      localStorage.removeItem("sellerHomeProfile");
+        // Send POST request to your API route
+        const res = await fetch("/api/auth/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userProfile),
+        });
 
-      const response = await fetch("/api/auth/seller-flow");
-      const data = await response.json();
-      console.log(data)
-    }
+        if (!res.ok) console.error("Failed to register user");
 
-    // const createListing = async () => {
-
-    // };
-
-    // const pushData = async () =>  Promise.race([registerUser(), createListing()]);
+        const data = await res.json();
+        console.log("User created:", data);
+      } catch (err) {
+        console.error("Error registering user:", err);
+      }
+    };
 
     if(formSubmitted) registerUser();
 
-  }, [formSubmitted])
+  }, [formSubmitted, userProfile])
 
   return (
     <div>
@@ -102,7 +107,7 @@ export default function SellerFlow() {
         <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
         <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
         <Email userProfile={userProfile} setUserProfile={setUserProfile} />
-
+        <PasswordStep userProfile={userProfile} setUserProfile={setUserProfile} />
       </QuestionaireFlow>
 
       <h4>Current User Info: </h4>
