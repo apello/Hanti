@@ -1,171 +1,81 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
-import WelcomeStep from "@/app/components/auth/simple-auth/WelcomeStep";
-import PurposeStep from "@/app/components/auth/simple-auth/PurposeStep";
-import LocationStep from "@/app/components/auth/simple-auth/LocationStep";
+import Link from "next/link";
 import EmailStep from "@/app/components/auth/simple-auth/EmailStep";
 import PasswordStep from "@/app/components/auth/simple-auth/PasswordStep";
-import NameStep from "@/app/components/auth/simple-auth/NameStep";
 
-export default function SimpleAuth() {
+export default function LoginPage() {
     const [formData, setFormData] = useState({
-        purpose: "",
-        location: "",
         email: "",
-        password: "",
-        firstName: "",
-        lastName: ""
+        password: ""
     });
 
-    const [isSignUp, setIsSignUp] = useState(false);
-    const [flowKey, setFlowKey] = useState(0);
-    const [userChoseMode, setUserChoseMode] = useState<null | "in" | "up">(null);
     const router = useRouter();
 
-    // Check if user exists (simulate API call)
-    const checkUserExists = async (email: string) => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // For demo purposes, assume user doesn't exist if email contains "new"
-        return !email.includes("new");
-    };
-
-    // Handle email step completion
-    useEffect(() => {
-        if (formData.email && formData.email.includes("@") && userChoseMode === null) {
-            checkUserExists(formData.email).then(exists => {
-                if (!exists) {
-                    setIsSignUp(true);
-                    resetFlow();
-                } else {
-                    setIsSignUp(false);
-                }
-            });
-        }
-    }, [formData.email, userChoseMode]);
-
-    const resetFlow = () => setFlowKey((k) => k + 1);
-
-    const chooseSignUp = () => {
-        setUserChoseMode("up");
-        setIsSignUp(true);
-        resetFlow();
-    };
-
-    const chooseSignIn = () => {
-        setUserChoseMode("in");
-        setIsSignUp(false);
-        resetFlow();
-    };
-
-    const handleComplete = async () => {
+    const handleLogin = async () => {
         try {
             // Simple session storage
             const timestamp = new Date().toISOString();
 
             // Log the credentials for backend
-            if (isSignUp) {
-                console.log("Simple Auth - Sign Up Payload:", {
-                    email: formData.email,
-                    password: formData.password,
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    purpose: formData.purpose,
-                    location: formData.location,
-                    timestamp,
-                });
-            } else {
-                console.log("Simple Auth - Sign In Payload:", {
-                    email: formData.email,
-                    password: formData.password,
-                    timestamp,
-                });
-            }
-
-            // Store user session
-            localStorage.setItem("userSession", JSON.stringify(
-                isSignUp
-                    ? {
-                        email: formData.email,
-                        firstName: formData.firstName,
-                        lastName: formData.lastName,
-                        isLoggedIn: true,
-                        loginTime: timestamp,
-                    }
-                    : {
-                        email: formData.email,
-                        isLoggedIn: true,
-                        loginTime: timestamp,
-                    }
-            ));
+            console.log("Login Payload:", {
+                email: formData.email,
+                password: formData.password,
+                timestamp,
+            });
 
             // Redirect to home
             router.push("/");
         } catch (error) {
-            console.error("Auth error:", error);
+            console.error("Login error:", error);
         }
     };
 
     return (
-        <div>
-            <h1>{isSignUp ? "Create Account" : "Sign In"}</h1>
-
-            {isSignUp ? (
-                <QuestionaireFlow key={`${isSignUp}-${flowKey}`}>
-                    <EmailStep
-                        email={formData.email}
-                        setEmail={(email) => setFormData({ ...formData, email })}
-                        onSignUpClick={chooseSignUp}
-                        showSignUpLink={false}
-                    />
-                    <PasswordStep
-                        password={formData.password}
-                        setPassword={(password) => setFormData({ ...formData, password })}
-                    />
-                    <WelcomeStep />
-                    <PurposeStep
-                        purpose={formData.purpose}
-                        setPurpose={(purpose) => setFormData({ ...formData, purpose })}
-                    />
-                    <LocationStep
-                        location={formData.location}
-                        setLocation={(location) => setFormData({ ...formData, location })}
-                    />
-                    <NameStep
-                        firstName={formData.firstName}
-                        setFirstName={(firstName) => setFormData({ ...formData, firstName })}
-                        lastName={formData.lastName}
-                        setLastName={(lastName) => setFormData({ ...formData, lastName })}
-                    />
-                </QuestionaireFlow>
-            ) : (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
                 <div>
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Sign in to your account
+                    </h2>
+                    <p className="mt-2 text-center text-sm text-gray-600">
+                        Or{" "}
+                        <button
+                            onClick={() => {
+                                console.log("Navigating to signup-flow");
+                                router.push("/auth/signup-flow");
+                            }}
+                            className="font-medium text-indigo-600 hover:text-indigo-500 bg-transparent border-none cursor-pointer underline"
+                        >
+                            create a new account
+                        </button>
+                    </p>
+                </div>
+
+                <div className="space-y-6">
                     <EmailStep
                         email={formData.email}
                         setEmail={(email) => setFormData({ ...formData, email })}
-                        onSignUpClick={chooseSignUp}
+                        onSignUpClick={() => router.push("/auth/signup-flow")}
                         showSignUpLink={false}
                     />
+
                     <PasswordStep
                         password={formData.password}
                         setPassword={(password) => setFormData({ ...formData, password })}
                     />
-                    <p>Don&apos;t have an account? <a href="#" onClick={(e) => { e.preventDefault(); chooseSignUp(); }}>Sign up</a></p>
+
+                    <button
+                        onClick={handleLogin}
+                        disabled={!formData.email || !formData.password}
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                        Sign In
+                    </button>
                 </div>
-            )}
-
-            {isSignUp ? (
-                <button onClick={handleComplete} style={{ marginTop: '20px' }}>
-                    Complete Sign Up
-                </button>
-            ) : (
-                <button onClick={handleComplete} style={{ marginTop: '20px' }}>
-                    Sign In
-                </button>
-            )}
-
+            </div>
         </div>
     );
 }

@@ -1,16 +1,17 @@
 import { SellerFlowData } from "@/types";
 import { useEffect, useState, ReactNode } from "react";
 
-const QuestionaireFlow = ({ children }: {
+const QuestionaireFlow = ({ children, onSubmit }: {
   children: ReactNode[];
+  onSubmit?: () => void;
 }) => {
   const [count, setCount] = useState(1);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    const saved = localStorage.getItem("questionaire-step");
-    if (saved) setCount(Number(saved));
+    localStorage.removeItem("questionaire-step");
+    setCount(1);
   }, []);
 
   useEffect(() => {
@@ -21,16 +22,10 @@ const QuestionaireFlow = ({ children }: {
 
   const decrementCount = () => setCount((c) => Math.max(1, c - 1));
 
-  const handleNext = () => {
-    if (count < children.length) {
-      setCount((c) => c + 1);
-    } else {
-      handleSubmit();
-    }
-  };
-
   const handleSubmit = async () => {
-
+    if (onSubmit) {
+      onSubmit();
+    }
   };
 
   if (!isMounted) {
@@ -42,19 +37,23 @@ const QuestionaireFlow = ({ children }: {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleNext();
+          if (count < children.length) {
+            setCount((c) => c + 1);
+          } else {
+            handleSubmit();
+          }
         }}
       >
         <div>{children[count - 1]}</div>
 
-        <input
+        <button
           type="submit"
-          value={count < children.length ? "Next" : "Submit"}
-        />
+          key={`submit-${count}`}
+        >
+          {count < children.length ? "Next" : "Complete Sign Up"}
+        </button>
       </form>
 
-      {count > 1 && <button onClick={decrementCount}>Back</button>}
-      Step {count} / {children.length}
       {count > 1 && <button onClick={decrementCount}>Back</button>}
       Step {count} / {children.length}
     </>

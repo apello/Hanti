@@ -9,8 +9,8 @@ const PurposeStep = ({
         { id: "buy", label: "I want to buy a home", description: "Find your dream property" },
         { id: "rent", label: "I want to rent", description: "Find your perfect rental" },
         { id: "sell", label: "I want to sell my home", description: "Get the best price for your property" },
-        { id: "invest", label: "I&apos;m looking to invest", description: "Build your real estate portfolio" },
-        { id: "explore", label: "Just exploring", description: "See what&apos;s available in my area" }
+        { id: "invest", label: "I'm looking to invest", description: "Build your real estate portfolio" },
+        { id: "explore", label: "Just exploring", description: "See what's available in my area" }
     ];
 
     return (
