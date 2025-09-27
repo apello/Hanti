@@ -1,10 +1,10 @@
 // ========== USERS ==========
 
 export interface User {
-  userId: number;       // PK
+  userId?: number;       // PK
   email: string;        // unique
   phoneNumber?: string; // QUESTION MARK MEANS NOT REQUIRED
-  passwordHash: string; // store hashed password
+  password: string; // store hashed password
   firstName: string;
   lastName: string;
   role: "buyer" | "seller" | "agent";
@@ -12,8 +12,8 @@ export interface User {
 }
 
 export interface PropertyListing {
-  listingId: number;    // PK
-  ownerId: number;      // FK → User.userId
+  listingId?: number;    // PK
+  ownerId?: number;      // FK → User.userId
   agentId?: number;     // FK → User.userId (role = "agent")
   address: string;
   timeline: string;     // e.g. "ASAP", "3-6 months"
@@ -27,11 +27,11 @@ export interface PropertyListing {
   };
   floors: number;
 
-  hasPool: boolean;
+  hasPool: string;
   poolType?: string;
   parkingSpaces: number;
-  isGatedCommunity: boolean;
-  hasBasement: boolean;
+  isGatedCommunity: string;
+  hasBasement: string;
   basementSquareFootage?: number;
 
   askingPrice: number;

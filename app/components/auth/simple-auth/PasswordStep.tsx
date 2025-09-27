@@ -1,17 +1,19 @@
+import { User } from "@/types/schema";
+
 const PasswordStep = ({
-    password,
-    setPassword,
+  userProfile,
+  setUserProfile,
 }: {
-    password: string;
-    setPassword: (password: string) => void;
+    userProfile: User;
+    setUserProfile: React.Dispatch<React.SetStateAction<User>>;
 }) => {
     return (
         <div>
             <label>Password</label>
             <input
                 type="password"
-                value={password || ""}
-                onChange={(e) => setPassword(e.target.value)}
+                value={userProfile.password || ""}
+                onChange={(e) => setUserProfile((prev) => ({ ...prev, password: e.target.value }))}
                 placeholder="Enter your password"
                 required
             />

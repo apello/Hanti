@@ -29,7 +29,7 @@ const QuestionaireFlow = ({ children, setFormSubmitted }: {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     localStorage.removeItem("questionaire-step");
     setFormSubmitted(true);
   };
