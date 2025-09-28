@@ -1,15 +1,17 @@
-import { User } from "@/types/schema";
+import { SignUpCredentials } from "@/types";
 
 const Location = ({
   userProfile,
   setUserProfile,
 }: {
-  userProfile: User;
-  setUserProfile: React.Dispatch<React.SetStateAction<User>>;
+  userProfile: SignUpCredentials;
+  setUserProfile: React.Dispatch<React.SetStateAction<SignUpCredentials>>;
 }) => {
+
+  // TODO: Add google autocomplete to get fully correct addresses
   return (
     <div>
-      <h1>Where are you looking?</h1>
+      <h1>Where are you?</h1>
       <h3>Tell us your preferred location</h3>
 
       <label>City, State, ZIP code</label>

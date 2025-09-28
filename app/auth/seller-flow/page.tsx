@@ -1,25 +1,27 @@
 "use client";
 
-import Location from "@/app/components/auth/simple-auth/Location";
+import Location from "@/app/components/auth/common-auth/Location";
 import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
-import Email from "@/app/components/auth/seller-flow/Email";
-import FullName from "@/app/components/auth/seller-flow/FullName";
+import Email from "@/app/components/auth/common-auth/Email";
+import FullName from "@/app/components/auth/common-auth/FullName";
 import HomeAddress from "@/app/components/auth/seller-flow/HomeAddress";
 import HomeDetailsA from "@/app/components/auth/seller-flow/HomeDetailsA";
 import HomeDetailsB from "@/app/components/auth/seller-flow/HomeDetailsB";
-import PhoneNumber from "@/app/components/auth/seller-flow/PhoneNumber";
+import PhoneNumber from "@/app/components/auth/common-auth/PhoneNumber";
 import SellingTimeline from "@/app/components/auth/seller-flow/SellingTimeline";
-import { User, PropertyListing } from "@/types/schema";
+import { PropertyListing } from "@/types/schema";
 import { useEffect, useState } from "react";
-import Password from "@/app/components/auth/simple-auth/Password";
+import Password from "@/app/components/auth/common-auth/Password";
+import Link from "next/link";
+import { SignUpCredentials } from "@/types";
 
 // TODO: Add Zod validation to all questionaire forms
 export default function SellerFlow() {
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const [userProfile, setUserProfile] = useState<User>({
+  const [userProfile, setUserProfile] = useState<SignUpCredentials>({
     email: "",
-    password: "",
+    passwordHash: "",
     phoneNumber: "",
     role: "seller",
     location: "",
@@ -45,7 +47,8 @@ export default function SellerFlow() {
     hasBasement: "",
     poolType: "",
     basementSquareFootage: undefined,
-    askingPrice: 0
+    askingPrice: 0,
+    verified: false
   });
 
   // Grab stored data if page is refreshed
@@ -74,17 +77,7 @@ export default function SellerFlow() {
         localStorage.removeItem("sellerUserProfile");
         localStorage.removeItem("sellerHomeProfile");
 
-        // Send POST request to your API route
-        const res = await fetch("/api/auth/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userProfile),
-        });
-
-        if (!res.ok) console.error("Failed to register user");
-
-        const data = await res.json();
-        console.log("User created:", data);
+      
       } catch (err) {
         console.error("Error registering user:", err);
       }
@@ -109,6 +102,8 @@ export default function SellerFlow() {
         <Email userProfile={userProfile} setUserProfile={setUserProfile} />
         <Password userProfile={userProfile} setUserProfile={setUserProfile} />
       </QuestionaireFlow>
+
+      <p>Already have a seller account? <Link href="/auth/login">Log in</Link></p>
 
       <h4>Current User Info: </h4>
       <p>{JSON.stringify(userProfile)}</p>

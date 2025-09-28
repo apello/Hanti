@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-    const [showDropdown, setShowDropdown] = useState(false);
+    const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -32,7 +33,13 @@ export default function Navbar() {
     }, []);
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut();
+        try {
+            await supabase.auth.signOut();
+            // Redirect to home with a sign-out param so pages can respond
+            router.push('/?param=signed-out');
+        } catch (err) {
+            console.error('Error signing out:', err);
+        }
     };
 
     return (
@@ -45,7 +52,9 @@ export default function Navbar() {
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                 <div style={{ fontWeight: 'bold', fontSize: '18px', color: '#333' }}>
-                    Hanti
+                    <Link href="/" style={{ textDecoration: 'none', color: '#333' }}>
+                        Hanti
+                    </Link>
                 </div>
                 <div style={{ display: 'flex', gap: '15px' }}>
                     <a href="#" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Buy</a>
@@ -77,9 +86,15 @@ export default function Navbar() {
                                 </button>
                             </div>
                         ) : (
-                            <Link href="/auth/login-flow" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
+                            <>
+                            <Link href="/auth/login" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
                                 Sign In
                             </Link>
+
+                             <Link href="/auth/signup-flow" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
+                                Sign Up
+                            </Link>
+                            </>
                         )
                     )}
                 </div>

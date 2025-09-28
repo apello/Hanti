@@ -37,13 +37,21 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
 
 -- Step 8: Create users table
 CREATE TABLE IF NOT EXISTS users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(32) UNIQUE NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  id serial PRIMARY KEY,
+  auth_id uuid UNIQUE REFERENCES auth.users(id),
+  email varchar(255) UNIQUE NOT NULL,
+  password_hash varchar(255),
+  first_name varchar(100),
+  last_name varchar(100),
+  phone_number varchar(32),
+  role varchar(20) DEFAULT 'buyer' NOT NULL,
+  location varchar(255),
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
 );
+
+CREATE INDEX idx_users_email ON public.users(email);
+CREATE UNIQUE INDEX idx_users_auth_id ON public.users(auth_id);
 
 -- Step 9: Create helpful indexes
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);

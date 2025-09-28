@@ -1,11 +1,11 @@
-import { User } from "@/types/schema";
+import { SignUpCredentials } from "@/types";
 
-const Name = ({
+const FullName = ({
     userProfile,
     setUserProfile,
 }: {
-    userProfile: User;
-    setUserProfile: React.Dispatch<React.SetStateAction<User>>;
+    userProfile: SignUpCredentials;
+    setUserProfile: React.Dispatch<React.SetStateAction<SignUpCredentials>>;
 }) => {
     return (
         <div>
@@ -35,4 +35,4 @@ const Name = ({
     );
 };
 
-export default Name;
+export default FullName;

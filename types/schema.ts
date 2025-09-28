@@ -1,18 +1,10 @@
 // ========== USERS ==========
 
 export interface User {
-  id?: string;          // Supabase Auth UUID (from auth.users)
-  userId?: number;      // Your custom user ID (from public.users table)
-  email: string;        // unique
-  password?: string;    // Only needed for forms, not stored in public.users
-  created_at?: string;
-  updated_at?: string;
-  phoneNumber?: string; // QUESTION MARK MEANS NOT REQUIRED
-  role: "buyer" | "seller" | "agent";
+  // UUID that links to auth.users(id)
+  authId?: string;
+  role: "buyer" | "seller" | "agent" | string;
   location: string;
-  firstName: string;
-  lastName: string;
-  auth_id?: string;     // Reference to Supabase auth.users.id
 }
 
 export interface PropertyListing {
@@ -37,8 +29,8 @@ export interface PropertyListing {
   isGatedCommunity: string;
   hasBasement: string;
   basementSquareFootage?: number;
-
   askingPrice: number;
+  verified: boolean;
 }
 
 export interface RentalUnit {

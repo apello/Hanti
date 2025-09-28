@@ -3,18 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import Email from "@/app/components/auth/simple-auth/Email";
-import Password from "@/app/components/auth/simple-auth/Password";
-import { User } from "@/types/schema";
+import Link from "next/link";
+import { LoginCredentials } from "@/types";
 
 export default function LoginPage() {
-    const [userProfile, setUserProfile] = useState<User>({
+    const [userProfile, setUserProfile] = useState<LoginCredentials>({
         email: "",
         password: "",
-        firstName: "",
-        lastName: "",
-        role: "buyer",
-        location: ""
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -57,39 +52,36 @@ export default function LoginPage() {
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                         Sign in to your account
                     </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        Or{" "}
-                        <button
-                            onClick={() => {
-                                console.log("Navigating to signup-flow");
-                                router.push("/auth/signup-flow");
-                            }}
-                            className="font-medium text-indigo-600 hover:text-indigo-500 bg-transparent border-none cursor-pointer underline"
-                        >
-                            create a new account
-                        </button>
-                    </p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                    <div style={{ color: "red" }}>
                         {error}
                     </div>
                 )}
 
                 <div className="space-y-6">
-                    <Email
-                        userProfile={userProfile}
-                        setUserProfile={setUserProfile}
-                        onSignUpClick={() => router.push("/auth/signup-flow")}
-                        showSignUpLink={false}
-                    />
+                    <div>
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            value={userProfile.email || ""}
+                            onChange={(e) => setUserProfile(prev => ({ ...prev, email: e.target.value }))}
+                            placeholder="Enter your email"
+                            required
+                        />
+                    </div>
 
-                    <Password
-                        userProfile={userProfile}
-                        setUserProfile={setUserProfile}
-                    />
-
+                    <div>
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            value={userProfile.password || ""}
+                            onChange={(e) => setUserProfile((prev) => ({ ...prev, password: e.target.value }))}
+                            placeholder="Enter your password"
+                            required
+                        />
+                    </div>
                     <button
                         onClick={handleLogin}
                         disabled={!userProfile.email || !userProfile.password || loading}
@@ -97,6 +89,10 @@ export default function LoginPage() {
                     >
                         {loading ? "Signing in..." : "Sign In"}
                     </button>
+
+                    <p>Don&apos;t have an account? <Link href="/auth/signup-flow">Sign up</Link></p>
+                    <p><Link href="/auth/forgot-password">Forgot password?</Link></p>
+                    
                 </div>
             </div>
         </div>

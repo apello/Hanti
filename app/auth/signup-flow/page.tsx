@@ -2,37 +2,33 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
-import Purpose from "@/app/components/auth/simple-auth/Purpose";
-import Location from "@/app/components/auth/simple-auth/Location";
-import Email from "@/app/components/auth/simple-auth/Email";
-import Password from "@/app/components/auth/simple-auth/Password";
-import Name from "@/app/components/auth/simple-auth/Name";
-import { User } from "@/types/schema";
+import Purpose from "@/app/components/auth/common-auth/Purpose";
+import Location from "@/app/components/auth/common-auth/Location";
+import Email from "@/app/components/auth/common-auth/Email";
+import Password from "@/app/components/auth/common-auth/Password";
+import Name from "@/app/components/auth/common-auth/FullName";
+import Link from "next/link";
+import { SignUpCredentials } from "@/types";
+import PhoneNumber from "@/app/components/auth/common-auth/PhoneNumber";
 
 export default function SignupPage() {
-
+    
     const [formSubmitted, setFormSubmitted] = useState(false);
     const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const [userProfile, setUserProfile] = useState<User>({
+    const [userProfile, setUserProfile] = useState<SignUpCredentials>({
         email: "",
         phoneNumber: "",
-        password: "",
+        passwordHash: "",
         firstName: "",
         lastName: "",
         role: "buyer",
         location: ""
     });
-
-    // Redirect to seller flow if seller role is selected
-    useEffect(() => {
-        if (userProfile.role === "seller") {
-            router.push("/auth/seller-flow");
-        }
-    }, [userProfile.role, router]);
 
     // Grab stored data if page is refreshed
     useEffect(() => {
@@ -46,85 +42,100 @@ export default function SignupPage() {
     }, [userProfile]);
 
     // Submit form
+    // TODO: Add automatic sign in
     useEffect(() => {
         const registerUser = async () => {
-            try {
-                // Remove stored data
-                localStorage.removeItem("signupUserProfile");
+            // Use promise chain and handle loading/errors in the chain
+            setIsLoading(true);
+            // clear previous error
+            setError(null);
+            // Remove stored data
+            localStorage.removeItem("signupUserProfile");
 
-                // Sign up with Supabase Auth
-                const { data: authData, error: authError } = await supabase.auth.signUp({
-                    email: userProfile.email,
-                    password: userProfile.password || "",
-                    options: {
-                        data: {
-                            firstName: userProfile.firstName,
-                            lastName: userProfile.lastName,
-                            role: userProfile.role,
-                            location: userProfile.location,
-                            phoneNumber: userProfile.phoneNumber
-                        }
+            // Sign up with Supabase Auth, then create a row in public.users
+            supabase.auth.signUp({
+                email: userProfile.email,
+                password: userProfile.passwordHash || "",
+                options: {
+                    data: {
+                        firstName: userProfile.firstName,
+                        lastName: userProfile.lastName,
+                        phoneNumber: userProfile.phoneNumber,
                     }
-                });
-
+                }
+            })
+            .then(({ data: authData, error: authError }) => {
                 if (authError) {
                     console.error("Auth signup error:", authError);
-                    return;
+                    setError(authError.message || JSON.stringify(authError));
+                    // throw to be caught by the outer catch below
+                    throw authError;
                 }
 
-                if (authData.user) {
-                    console.log("Supabase Auth signup successful:", authData.user);
+                if (authData?.user) {
+                    const authId = authData.user.id;
+                    // Insert into the public.users table (auth_id links to auth.users.id)
+                    return supabase
+                        .from('users')
+                        .insert([{
+                            auth_id: authId,
+                            role: userProfile.role,
+                            location: userProfile.location
+                        }])
+                        .then(({ error: insertError }) => {
+                            if (insertError) {
+                                console.error('Error inserting user profile:', insertError);
+                                setError(insertError.message || JSON.stringify(insertError));
+                                throw insertError;
+                            }
 
-                    // Try to create profile in custom users table (if migration is complete)
-                    try {
-                        const { data: profileData, error: profileError } = await supabase
-                            .from('users')
-                            .upsert({
-                                auth_id: authData.user.id,
-                                email: userProfile.email,
-                                first_name: userProfile.firstName,
-                                last_name: userProfile.lastName,
-                                role: userProfile.role,
-                                location: userProfile.location,
-                                phone_number: userProfile.phoneNumber,
-                                username: userProfile.email.split('@')[0] // Create username from email
-                            });
-
-                        if (profileError) {
-                            console.error("Profile creation error (migration may not be complete):", profileError);
-                            console.log("User authenticated successfully, but profile creation failed. Please run the database migration.");
-                        } else {
-                            console.log("Profile created successfully:", profileData);
-                        }
-                    } catch (profileError) {
-                        console.error("Profile creation failed:", profileError);
-                        console.log("User authenticated successfully, but profile creation failed. Please run the database migration.");
-                    }
-
-                    // Redirect regardless of profile creation (auth still works)
-                    console.log("Redirecting to home...");
-                    router.push("/");
+                            // Navigate after profile is created
+                            router.push('/?param=new-user');
+                        });
                 }
-
-            } catch (error) {
-                console.error("Signup error:", error);
-            }
+            })
+            .catch((err) => {
+                console.error("Signup error:", err);
+                setError(err.message ?? "Something went wrong: " + JSON.stringify(err));
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
         };
 
-        if (formSubmitted) registerUser();
+        if (formSubmitted) {
+            registerUser();
+            setFormSubmitted(false);
+        }
     }, [formSubmitted, userProfile, router]);
 
     return (
         <div>
             <h1>Signup flow</h1>
+            <h3>Please complete the steps below to create your account.</h3>
+
+            {isLoading && (
+                <div style={{ color: "blue" }}>
+                    Creating your account... Please wait.
+                </div>
+            )}
+
+            {error && (
+                <div style={{ color: "red" }}>
+                    {error}
+                </div>
+            )}
+
             <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
                 <Purpose userProfile={userProfile} setUserProfile={setUserProfile} />
                 <Location userProfile={userProfile} setUserProfile={setUserProfile} />
                 <Name userProfile={userProfile} setUserProfile={setUserProfile} />
+                <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
                 <Email userProfile={userProfile} setUserProfile={setUserProfile} />
                 <Password userProfile={userProfile} setUserProfile={setUserProfile} />
-
             </QuestionaireFlow>
+
+            <p>Already have an account? <Link href="/auth/login">Log in</Link></p>
 
             <h4>Current User Info: </h4>
             <p>{JSON.stringify(userProfile)}</p>

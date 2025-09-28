@@ -1,4 +1,4 @@
-import { supabase } from "@/backend/supabase/server";
+import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 // POST create user

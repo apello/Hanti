@@ -1,57 +1,16 @@
 // Authentication types
-export type AuthUser = {
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    isLoggedIn: boolean;
-    loginTime: string;
-};
-
 export type LoginCredentials = {
     email: string;
     password: string;
 };
 
-export type SignupData = {
-    firstName: string;
-    lastName: string;
+export type SignUpCredentials = {
     email: string;
-    password: string;
-    confirmPassword: string;
-};
-
-// Seller User Info type
-export type UserInfo = {
-    sellerEmail: string;
+    phoneNumber: string;
+    passwordHash: string;
     firstName: string;
     lastName: string;
-    phoneNumber: string;
-};
+    role: string;
+    location: string;
+}
 
-// Seller Home Info type
-export type YesNo = "yes" | "no" | string;
-
-export type HomeInfo = {
-    homeAddress: string;
-    agentDetails: number;
-    timeline: string; 
-    squareFootage: number;
-    yearBuilt: number;
-    bedrooms: number;
-    fullBathrooms: number;
-    threeFourthBathrooms: number;
-    oneHalfBathrooms: number;
-    floors: number;
-    hasPool: YesNo;
-    parkingSpaces: number;
-    gatedCommunity: YesNo;
-    hasBasement: YesNo;
-    poolType: "above ground" | "in ground" | string;
-    basementSquareFootage?: number; // optional since it might be empty
-};
-
-// Seller form data
-export type SellerFlowData = {
-  userInfo: UserInfo;
-  homeInfo: HomeInfo;
-};

@@ -1,19 +1,19 @@
-import { User } from "@/types/schema";
+import { SignUpCredentials } from "@/types";
 
 const Password = ({
     userProfile,
     setUserProfile,
 }: {
-    userProfile: User;
-    setUserProfile: React.Dispatch<React.SetStateAction<User>>;
+    userProfile: SignUpCredentials;
+    setUserProfile: React.Dispatch<React.SetStateAction<SignUpCredentials>>;
 }) => {
     return (
         <div>
             <label>Password</label>
             <input
                 type="password"
-                value={userProfile.password || ""}
-                onChange={(e) => setUserProfile((prev) => ({ ...prev, password: e.target.value }))}
+                value={userProfile.passwordHash || ""}
+                onChange={(e) => setUserProfile((prev) => ({ ...prev, passwordHash: e.target.value }))}
                 placeholder="Enter your password"
                 required
             />
