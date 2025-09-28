@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { registerUser } from "@/lib/registerUser";
 import QuestionaireFlow from "@/app/components/auth/QuestionaireFlow";
 import Purpose from "@/app/components/auth/common-auth/Purpose";
 import Location from "@/app/components/auth/common-auth/Location";
@@ -14,9 +14,9 @@ import { SignUpCredentials } from "@/types";
 import PhoneNumber from "@/app/components/auth/common-auth/PhoneNumber";
 
 export default function SignupPage() {
-    
-    const [formSubmitted, setFormSubmitted] = useState(false);
     const router = useRouter();
+
+    const [formSubmitted, setFormSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -30,81 +30,34 @@ export default function SignupPage() {
         location: ""
     });
 
-    // Grab stored data if page is refreshed
+    // Grab stored data if page is refreshed (persist partially-completed signup)
     useEffect(() => {
         const savedUser = localStorage.getItem("signupUserProfile");
         if (savedUser) setUserProfile(JSON.parse(savedUser));
     }, []);
 
-    // Store data in case page is refreshed
+    // Store data in case page is refreshed (keeps user's progress between steps)
     useEffect(() => {
         localStorage.setItem("signupUserProfile", JSON.stringify(userProfile));
     }, [userProfile]);
 
     // Submit form
-    // TODO: Add automatic sign in
+    // - When `formSubmitted` toggles, call the shared `registerUser` helper
+    // - `registerUser` will remove the provided storage keys and update UI via callbacks
+    // TODO: Add automatic sign in after successful registration
     useEffect(() => {
-        const registerUser = async () => {
-            // Use promise chain and handle loading/errors in the chain
-            setIsLoading(true);
-            // clear previous error
-            setError(null);
-            // Remove stored data
-            localStorage.removeItem("signupUserProfile");
-
-            // Sign up with Supabase Auth, then create a row in public.users
-            supabase.auth.signUp({
-                email: userProfile.email,
-                password: userProfile.passwordHash || "",
-                options: {
-                    data: {
-                        firstName: userProfile.firstName,
-                        lastName: userProfile.lastName,
-                        phoneNumber: userProfile.phoneNumber,
-                    }
-                }
-            })
-            .then(({ data: authData, error: authError }) => {
-                if (authError) {
-                    console.error("Auth signup error:", authError);
-                    setError(authError.message || JSON.stringify(authError));
-                    // throw to be caught by the outer catch below
-                    throw authError;
-                }
-
-                if (authData?.user) {
-                    const authId = authData.user.id;
-                    // Insert into the public.users table (auth_id links to auth.users.id)
-                    return supabase
-                        .from('users')
-                        .insert([{
-                            auth_id: authId,
-                            role: userProfile.role,
-                            location: userProfile.location
-                        }])
-                        .then(({ error: insertError }) => {
-                            if (insertError) {
-                                console.error('Error inserting user profile:', insertError);
-                                setError(insertError.message || JSON.stringify(insertError));
-                                throw insertError;
-                            }
-
-                            // Navigate after profile is created
-                            router.push('/?param=new-user');
-                        });
-                }
-            })
-            .catch((err) => {
-                console.error("Signup error:", err);
-                setError(err.message ?? "Something went wrong: " + JSON.stringify(err));
-            })
-            .finally(() => {
-                setIsLoading(false);
+        const doRegister = async () => {
+            await registerUser({
+                userProfile,
+                storageKeys: ["signupUserProfile"],
+                router,
+                setError,
+                setIsLoading,
             });
         };
 
         if (formSubmitted) {
-            registerUser();
+            doRegister();
             setFormSubmitted(false);
         }
     }, [formSubmitted, userProfile, router]);
@@ -115,15 +68,11 @@ export default function SignupPage() {
             <h3>Please complete the steps below to create your account.</h3>
 
             {isLoading && (
-                <div style={{ color: "blue" }}>
-                    Creating your account... Please wait.
-                </div>
+                <div style={{ color: "blue" }}>Loading...</div>
             )}
 
             {error && (
-                <div style={{ color: "red" }}>
-                    {error}
-                </div>
+                <div style={{ color: "red" }}>{error}</div>
             )}
 
             <QuestionaireFlow setFormSubmitted={setFormSubmitted}>

@@ -14,10 +14,16 @@ import { useEffect, useState } from "react";
 import Password from "@/app/components/auth/common-auth/Password";
 import Link from "next/link";
 import { SignUpCredentials } from "@/types";
+import { registerUser } from "@/lib/registerUser";
+import { useRouter } from "next/navigation";
 
 // TODO: Add Zod validation to all questionaire forms
 export default function SellerFlow() {
+  const router = useRouter();
+  
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [userProfile, setUserProfile] = useState<SignUpCredentials>({
     email: "",
@@ -69,27 +75,37 @@ export default function SellerFlow() {
     localStorage.setItem("sellerHomeProfile", JSON.stringify(homeProfile));
   }, [homeProfile]);
 
-  // Submit form
-  useEffect(() => {
-    const registerUser = async () => {
-      try {
-        // Clear local storage
-        localStorage.removeItem("sellerUserProfile");
-        localStorage.removeItem("sellerHomeProfile");
 
-      
-      } catch (err) {
-        console.error("Error registering user:", err);
+   useEffect(() => {
+      const doRegister = async () => {
+          await registerUser({
+              userProfile,
+              storageKeys: ["sellerUserProfile", "sellerHomeProfile"],
+              router,
+              setError,
+              setIsLoading,
+          });
+      };
+
+      if (formSubmitted) {
+          doRegister();
+          setFormSubmitted(false);
       }
-    };
+  }, [formSubmitted, userProfile, router]);
 
-    if (formSubmitted) registerUser();
-
-  }, [formSubmitted, userProfile])
 
   return (
     <div>
       <h1>Seller flow</h1>
+
+      {isLoading && (
+          <div style={{ color: "blue" }}>Loading...</div>
+      )}
+
+      {error && (
+          <div style={{ color: "red" }}>{error}</div>
+      )}
+
       <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
         <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
         <Location userProfile={userProfile} setUserProfile={setUserProfile} />
