@@ -14,6 +14,7 @@ import Link from "next/link";
 import { SignUpCredentials } from "@/types";
 import { registerUser } from "@/lib/registerUser";
 import { useRouter } from "next/navigation";
+import RequireNoAuth from "@/app/components/auth/common-auth/RequireNoAuth";
 
 interface AgentProfile {
   estateBoardId: string;
@@ -93,42 +94,44 @@ export default function AgentFlow() {
   }, [formSubmitted, userProfile, router]);
 
   return (
-    <div>
-      <h1>Agent Registration</h1>
-      <h3>Join our network of professional real estate agents</h3>
+    <RequireNoAuth>
+      <div>
+        <h1>Agent Registration</h1>
+        <h3>Join our network of professional real estate agents</h3>
 
-      {isLoading && (
-        <div style={{ color: "blue" }}>Loading...</div>
-      )}
+        {isLoading && (
+          <div style={{ color: "blue" }}>Loading...</div>
+        )}
 
-      {error && (
-        <div style={{ color: "red" }}>{error}</div>
-      )}
+        {error && (
+          <div style={{ color: "red" }}>{error}</div>
+        )}
 
-      <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
-        <LicenseDetails agentProfile={agentProfile} setAgentProfile={setAgentProfile} />
-        <ProfessionalDetails agentProfile={agentProfile} setAgentProfile={setAgentProfile} />
-        <ServicesSpecialization agentProfile={agentProfile} setAgentProfile={setAgentProfile} />
-        <Location userProfile={userProfile} setUserProfile={setUserProfile} />
-        <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
-        <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
-        <Email userProfile={userProfile} setUserProfile={setUserProfile} />
-        <Password userProfile={userProfile} setUserProfile={setUserProfile} />
-      </QuestionaireFlow>
+        <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
+          <LicenseDetails agentProfile={agentProfile} setAgentProfile={setAgentProfile} />
+          <ProfessionalDetails agentProfile={agentProfile} setAgentProfile={setAgentProfile} />
+          <ServicesSpecialization agentProfile={agentProfile} setAgentProfile={setAgentProfile} />
+          <Location userProfile={userProfile} setUserProfile={setUserProfile} />
+          <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
+          <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
+          <Email userProfile={userProfile} setUserProfile={setUserProfile} />
+          <Password userProfile={userProfile} setUserProfile={setUserProfile} />
+        </QuestionaireFlow>
 
-      <p>Already have an agent account? <Link href="/auth/login">Log in</Link></p>
+        <p>Already have an agent account? <Link href="/auth/login">Log in</Link></p>
 
-      <div style={{ marginTop: "30px", padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "8px" }}>
-        <h4>Current User Info:</h4>
-        <pre style={{ fontSize: "12px", overflow: "auto" }}>
-          {JSON.stringify(userProfile, null, 2)}
-        </pre>
+        <div style={{ marginTop: "30px", padding: "15px", backgroundColor: "#f8f9fa", borderRadius: "8px" }}>
+          <h4>Current User Info:</h4>
+          <pre style={{ fontSize: "12px", overflow: "auto" }}>
+            {JSON.stringify(userProfile, null, 2)}
+          </pre>
 
-        <h4>Current Agent Info:</h4>
-        <pre style={{ fontSize: "12px", overflow: "auto" }}>
-          {JSON.stringify(agentProfile, null, 2)}
-        </pre>
+          <h4>Current Agent Info:</h4>
+          <pre style={{ fontSize: "12px", overflow: "auto" }}>
+            {JSON.stringify(agentProfile, null, 2)}
+          </pre>
+        </div>
       </div>
-    </div>
+    </RequireNoAuth>
   );
 }

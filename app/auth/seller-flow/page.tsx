@@ -16,11 +16,12 @@ import Link from "next/link";
 import { SignUpCredentials } from "@/types";
 import { registerUser } from "@/lib/registerUser";
 import { useRouter } from "next/navigation";
+import RequireNoAuth from "@/app/components/auth/common-auth/RequireNoAuth";
 
 // TODO: Add Zod validation to all questionaire forms
 export default function SellerFlow() {
   const router = useRouter();
-  
+
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -76,56 +77,58 @@ export default function SellerFlow() {
   }, [homeProfile]);
 
 
-   useEffect(() => {
-      const doRegister = async () => {
-          await registerUser({
-              userProfile,
-              storageKeys: ["sellerUserProfile", "sellerHomeProfile"],
-              router,
-              setError,
-              setIsLoading,
-          });
-      };
+  useEffect(() => {
+    const doRegister = async () => {
+      await registerUser({
+        userProfile,
+        storageKeys: ["sellerUserProfile", "sellerHomeProfile"],
+        router,
+        setError,
+        setIsLoading,
+      });
+    };
 
-      if (formSubmitted) {
-          doRegister();
-          setFormSubmitted(false);
-      }
+    if (formSubmitted) {
+      doRegister();
+      setFormSubmitted(false);
+    }
   }, [formSubmitted, userProfile, router]);
 
 
   return (
-    <div>
-      <h1>Seller flow</h1>
+    <RequireNoAuth>
+      <div>
+        <h1>Seller flow</h1>
 
-      {isLoading && (
+        {isLoading && (
           <div style={{ color: "blue" }}>Loading...</div>
-      )}
+        )}
 
-      {error && (
+        {error && (
           <div style={{ color: "red" }}>{error}</div>
-      )}
+        )}
 
-      <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
-        <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
-        <Location userProfile={userProfile} setUserProfile={setUserProfile} />
-        {/* <AgentDetails homeProfile={homeProfile} setHomeProfile={setHomeProfile} /> */}
-        <SellingTimeline homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
-        <HomeDetailsA homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
-        <HomeDetailsB homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
-        <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
-        <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
-        <Email userProfile={userProfile} setUserProfile={setUserProfile} />
-        <Password userProfile={userProfile} setUserProfile={setUserProfile} />
-      </QuestionaireFlow>
+        <QuestionaireFlow setFormSubmitted={setFormSubmitted}>
+          <HomeAddress homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+          <Location userProfile={userProfile} setUserProfile={setUserProfile} />
+          {/* <AgentDetails homeProfile={homeProfile} setHomeProfile={setHomeProfile} /> */}
+          <SellingTimeline homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+          <HomeDetailsA homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+          <HomeDetailsB homeProfile={homeProfile} setHomeProfile={setHomeProfile} />
+          <FullName userProfile={userProfile} setUserProfile={setUserProfile} />
+          <PhoneNumber userProfile={userProfile} setUserProfile={setUserProfile} />
+          <Email userProfile={userProfile} setUserProfile={setUserProfile} />
+          <Password userProfile={userProfile} setUserProfile={setUserProfile} />
+        </QuestionaireFlow>
 
-      <p>Already have a seller account? <Link href="/auth/login">Log in</Link></p>
+        <p>Already have a seller account? <Link href="/auth/login">Log in</Link></p>
 
-      <h4>Current User Info: </h4>
-      <p>{JSON.stringify(userProfile)}</p>
+        <h4>Current User Info: </h4>
+        <p>{JSON.stringify(userProfile)}</p>
 
-      <h4>Current Home Info: </h4>
-      <p>{JSON.stringify(homeProfile)}</p>
-    </div>
+        <h4>Current Home Info: </h4>
+        <p>{JSON.stringify(homeProfile)}</p>
+      </div>
+    </RequireNoAuth>
   );
 }

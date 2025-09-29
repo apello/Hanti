@@ -46,25 +46,73 @@ export async function registerUser(params: {
     if (authError) {
       // Surface auth errors back to the caller
       console.error("Auth signup error:", authError);
-      setError?.(authError.message || JSON.stringify(authError));
+      // If auth reports the user already exists, show a friendly message
+      const authMsg = (authError.message || "").toLowerCase();
+      if (authMsg.includes("already registered") || authMsg.includes("user already exists") || authMsg.includes("account already exists")) {
+        setError?.("An account with that email already exists. Please sign in instead.");
+      } else {
+        setError?.(authError.message || JSON.stringify(authError));
+      }
       return;
     }
 
     if (authData?.user) {
-      // Create a user profile row in the `users` table linked by auth id
+      // Create or update a user profile row in the `users` table linked by auth id.
+      // Use upsert so repeated signups (or pre-existing rows created by migrations/tools)
+      // do not cause a duplicate-key error. If the client library/environment does
+      // not support upsert options, the DB will still error and we'll try an update fallback.
       const authId = authData.user.id;
-      const { error: insertError } = await supabase.from("users").insert([
-        {
-          auth_id: authId,
-          role: userProfile.role,
-          location: userProfile.location,
-        },
-      ]);
+      const userRow = {
+        auth_id: authId,
+        role: userProfile.role,
+        location: userProfile.location,
+      };
 
-      if (insertError) {
-        console.error("Error inserting user profile:", insertError);
-        setError?.(insertError.message || JSON.stringify(insertError));
-        return;
+      // Try upsert first (preferred). This will insert or update the row by auth_id.
+      const { error: upsertError } = await supabase.from("users").upsert([userRow], {
+        onConflict: "auth_id",
+      });
+
+      if (upsertError) {
+        // If upsert failed, attempt to detect duplicate-key errors and show a friendly message.
+        const msg = String(upsertError.message || "").toLowerCase();
+        const code = (upsertError as any)?.code || (upsertError as any)?.status;
+        if (msg.includes("duplicate key") || msg.includes("unique constraint") || code === '23505') {
+          setError?.("An account already exists for this user. Please sign in instead.");
+          return;
+        }
+
+        console.warn("Upsert failed, attempting safe fallback:", upsertError);
+
+        // Try to update an existing row with this auth_id
+        const { error: updateError } = await supabase
+          .from("users")
+          .update({ role: userProfile.role, location: userProfile.location })
+          .eq("auth_id", authId);
+
+        if (updateError) {
+          const uMsg = String(updateError.message || "").toLowerCase();
+          const uCode = (updateError as any)?.code || (updateError as any)?.status;
+          if (uMsg.includes("duplicate key") || uMsg.includes("unique constraint") || uCode === '23505') {
+            setError?.("An account already exists for this user. Please sign in instead.");
+            return;
+          }
+
+          // If update also failed, try a regular insert as a last resort and report any error
+          const { error: insertError } = await supabase.from("users").insert([userRow]);
+          if (insertError) {
+            const iMsg = String(insertError.message || "").toLowerCase();
+            const iCode = (insertError as any)?.code || (insertError as any)?.status;
+            if (iMsg.includes("duplicate key") || iMsg.includes("unique constraint") || iCode === '23505') {
+              setError?.("An account already exists for this user. Please sign in instead.");
+              return;
+            }
+
+            console.error("Error creating/updating user profile:", insertError);
+            setError?.(insertError.message || JSON.stringify(insertError));
+            return;
+          }
+        }
       }
 
       // Redirect to a success page/state

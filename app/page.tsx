@@ -16,7 +16,6 @@ export default function Home() {
     <div>
       {isNewUser && (
         <div style={{ border: "1px solid #cce5ff", background: "#e6f2ff", padding: 12, borderRadius: 6, marginBottom: 12 }}>
-          <h2 style={{ margin: 0 }}>Welcome to Hanti!</h2>
           <p style={{ margin: "6px 0 0" }}>
             Thanks for signing up — please check your email and click the verification link to activate your account.
           </p>

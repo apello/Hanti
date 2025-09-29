@@ -4,11 +4,12 @@ import React from "react";
 import Link from "next/link";
 import { SignUpCredentials } from "@/types";
 
-type Role = "buyer" | "seller" | "agent";
+type Role = "buyer" | "seller" | "agent" | "landlord";
 
 const roles: { id: Role; label: string; description: string; href?: string }[] = [
     { id: "buyer", label: "I'm a buyer", description: "Looking to buy property" },
     { id: "seller", label: "I'm a seller", description: "Looking to sell my property", href: "/auth/seller-flow" },
+    { id: "landlord", label: "I'm a landlord", description: "Looking to rent out my property", href: "/auth/rental-flow" },
     { id: "agent", label: "I'm an agent", description: "Real estate professional", href: "/auth/agent-flow" },
 ];
 
@@ -37,42 +38,42 @@ const Purpose = ({
                 {roles.map((r) => {
                     const selected = userProfile.role === r.id;
 
-                        if (r.href) {
-                            return (
-                                <Link
-                                    key={r.id}
-                                    href={r.href}
-                                    style={{
-                                        display: "block",
-                                        ...baseStyle,
-                                        border: selected ? "2px solid #007bff" : "1px solid #ddd",
-                                        backgroundColor: selected ? "#f8f9ff" : "white",
-                                        color: "inherit",
-                                        textDecoration: "none",
-                                    }}
-                                >
-                                    <div style={{ fontWeight: 600, fontSize: 16, color: "#333" }}>{r.label}</div>
-                                    <div style={{ fontSize: 14, color: "#666", marginTop: 5 }}>{r.description}</div>
-                                </Link>
-                            );
-                        }
-
-                        // buyer: submit and update parent state
+                    if (r.href) {
                         return (
-                            <button
+                            <Link
                                 key={r.id}
-                                type="submit"
-                                onClick={() => setUserProfile((prev) => ({ ...prev, role: r.id }))}
+                                href={r.href}
                                 style={{
+                                    display: "block",
                                     ...baseStyle,
                                     border: selected ? "2px solid #007bff" : "1px solid #ddd",
                                     backgroundColor: selected ? "#f8f9ff" : "white",
+                                    color: "inherit",
+                                    textDecoration: "none",
                                 }}
                             >
                                 <div style={{ fontWeight: 600, fontSize: 16, color: "#333" }}>{r.label}</div>
                                 <div style={{ fontSize: 14, color: "#666", marginTop: 5 }}>{r.description}</div>
-                            </button>
+                            </Link>
                         );
+                    }
+
+                    // buyer: submit and update parent state
+                    return (
+                        <button
+                            key={r.id}
+                            type="submit"
+                            onClick={() => setUserProfile((prev) => ({ ...prev, role: r.id }))}
+                            style={{
+                                ...baseStyle,
+                                border: selected ? "2px solid #007bff" : "1px solid #ddd",
+                                backgroundColor: selected ? "#f8f9ff" : "white",
+                            }}
+                        >
+                            <div style={{ fontWeight: 600, fontSize: 16, color: "#333" }}>{r.label}</div>
+                            <div style={{ fontSize: 14, color: "#666", marginTop: 5 }}>{r.description}</div>
+                        </button>
+                    );
                 })}
             </div>
         </div>

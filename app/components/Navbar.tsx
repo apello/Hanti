@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 export default function Navbar() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
+    const [role, setRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -16,6 +17,10 @@ export default function Navbar() {
         const getInitialSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             setUser(session?.user ?? null);
+            if (session?.user?.id) {
+                const { data: userRec } = await supabase.from('users').select('role').eq('auth_id', session.user.id).maybeSingle();
+                setRole((userRec as any)?.role ?? null);
+            }
             setLoading(false);
         };
 
@@ -25,6 +30,12 @@ export default function Navbar() {
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event, session) => {
                 setUser(session?.user ?? null);
+                if (session?.user?.id) {
+                    const { data: userRec } = await supabase.from('users').select('role').eq('auth_id', session.user.id).maybeSingle();
+                    setRole((userRec as any)?.role ?? null);
+                } else {
+                    setRole(null);
+                }
                 setLoading(false);
             }
         );
@@ -60,7 +71,16 @@ export default function Navbar() {
                     <a href="#" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Buy</a>
                     <a href="#" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Rent</a>
                     <Link href="/auth/seller-flow" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Sell</Link>
-                    <a href="#" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>List Rentals</a>
+                    <Link href="/auth/rental-flow" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>List Rentals</Link>
+                    {role === 'seller' && (
+                        <Link href="/dashboard/seller" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Seller Dashboard</Link>
+                    )}
+                    {role === 'landlord' && (
+                        <Link href="/dashboard/rental" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Rental Dashboard</Link>
+                    )}
+                    {role === 'agent' && (
+                        <Link href="/dashboard/agent" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>Agent Dashboard</Link>
+                    )}
                     <a href="#" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>See Agents</a>
                 </div>
                 <div style={{ marginLeft: 'auto' }}>
@@ -87,13 +107,13 @@ export default function Navbar() {
                             </div>
                         ) : (
                             <>
-                            <Link href="/auth/login" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
-                                Sign In
-                            </Link>
+                                <Link href="/auth/login" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
+                                    Sign In
+                                </Link>
 
-                             <Link href="/auth/signup-flow" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
-                                Sign Up
-                            </Link>
+                                <Link href="/auth/signup-flow" style={{ textDecoration: 'none', color: '#333', padding: '8px 12px', borderRadius: '4px' }}>
+                                    Sign Up
+                                </Link>
                             </>
                         )
                     )}
