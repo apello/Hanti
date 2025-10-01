@@ -1,0 +1,44 @@
+{
+  "scraping_session": {
+    "start_time": "2025-09-16T11:27:29.983172",
+    "end_time": "2025-09-16T11:45:00.000000",
+    "duration_seconds": 1050
+  },
+  "statistics": {
+    "total_items": 10,
+    "images_downloaded": 94,
+    "errors": 0,
+    "start_time": "2025-09-16T11:27:29.983172",
+    "end_time": "2025-09-16T11:45:00.000000"
+  },
+  "data_counts": {
+    "property_listings": 7,
+    "projects": 1,
+    "articles": 1,
+    "estate_agents": 1
+  },
+  "image_mapping": {
+    "total_properties_with_images": 7,
+    "coverage_percentage": 100.0,
+    "excluded_property_ids": [5, 7, 8],
+    "total_images_across_all_properties": 94,
+    "images_per_property": {
+      "id1": 22,
+      "id2": 11, 
+      "id3": 10,
+      "id4": 13,
+      "id6": 12,
+      "id9": 13,
+      "id10": 13
+    },
+    "image_folders": [
+      "id1_Images/",
+      "id2_Images/",
+      "id3_Images/", 
+      "id4_Images/",
+      "id6_Images/",
+      "id9_Images/",
+      "id10_Images/"
+    ]
+  }
+}

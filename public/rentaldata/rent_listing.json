@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "title": "1 Bedroom Apartment",
+    "price": "KSh 85,000/month",
+    "location": "1 Bed Apartment at kilimani",
+    "bedrooms": "1",
+    "bathrooms": "1",
+    "area": "N/A",
+    "property_type": "Apartment",
+    "transaction_type": "Rent",
+    "images": [
+      "idimg1/1d946690-86bf-4cf0-a05c-de4aaad6f74f.jpeg",
+      "idimg1/38f0fb6c-c2c9-4b32-b9fc-a67f0002af5c.jpeg",
+      "idimg1/5443723c-7cc4-4f80-b2ed-ae98bfb5b4b3.jpeg",
+      "idimg1/551c4d31-416a-47fc-af71-4a098de651c5.jpeg",
+      "idimg1/6a06ac35-ef0d-4748-aa89-26fb523ba678.jpeg",
+      "idimg1/7a088a35-d660-463e-9caa-604bf1bc2574.jpeg",
+      "idimg1/89127a8d-e003-4652-96bc-f954c77b4d74.jpeg",
+      "idimg1/a061cea1-b148-4faf-b524-4532d256fe60.jpeg",
+      "idimg1/c5110903-fb76-4258-8423-8a417a2c670c.jpeg",
+      "idimg1/dcd501ba-30b0-400c-b8de-af3ce923ade2.jpeg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "5 Bedroom Apartment",
+    "price": "KSh 280,000/Month",
+    "location": "5 Bed Apartment with En Suite in Lavington",
+    "bedrooms": "5",
+    "bathrooms": "5",
+    "area": "N/A",
+    "property_type": "Apartment",
+    "transaction_type": "Rent",
+    "images": [
+      "idimg2/08108656-9c36-4653-811c-dad0e8fa9f80.jpeg",
+      "idimg2/0a095751-29e7-4f0f-9368-c04a779b8618.jpeg",
+      "idimg2/0e82af9c-c103-43ca-bfd2-4da3700a7d5d.jpeg",
+      "idimg2/11c5a189-f7b3-4f65-8e04-532dcf2689f0.jpeg",
+      "idimg2/2e427ab7-2e26-46fb-86c4-94287cf2f9cc.jpeg",
+      "idimg2/3b7ccb28-035b-4793-93ab-e153b7e1622a.jpeg",
+      "idimg2/40d2d8fa-7369-4d48-a1bc-6344637476a5.jpeg",
+      "idimg2/503f4fe0-9054-41e1-8ad7-2877f47360fc.jpeg",
+      "idimg2/5076b55f-5239-4e5b-9534-066bf192b726.jpeg",
+      "idimg2/526d9cc9-890f-4ea7-96ce-d19e7e11a0ac.jpeg",
+      "idimg2/74c92e98-682e-428b-9110-08660268b809.jpeg",
+      "idimg2/7bdce36e-9ea3-4039-8370-255f85632b42.jpeg",
+      "idimg2/886767c5-0363-4d6a-ab68-8c5222bafea1.webp",
+      "idimg2/9b50def9-920a-4f55-ba2e-033dcb8d0224.jpeg",
+      "idimg2/d0d41d1a-e6e3-4f8f-9a61-ca013607d53a.jpeg",
+      "idimg2/e2617d0e-584b-4c00-89c2-c48103781e28.jpeg",
+      "idimg2/e2895ab6-e59d-41e7-ae27-97b266893bf8.jpeg",
+      "idimg2/e80f734b-cdd2-40fb-8bb9-52709481efa3.jpeg",
+      "idimg2/fa392741-a513-4ee6-98d0-1de759d25429.jpeg",
+      "idimg2/fc703f19-9d0f-4191-bfa6-deaa8e497543.jpeg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "2 Bedroom Apartment",
+    "price": "KSh 280,000/Month",
+    "location": "Serviced 2 Bed Apartment with En Suite in Spring Valley",
+    "bedrooms": "2",
+    "bathrooms": "3",
+    "area": "N/A",
+    "property_type": "Apartment",
+    "transaction_type": "Rent",
+    "images": [
+      "idimg3/0a7b8430-0ac0-49f6-9188-b19cef891605 (1).jpeg",
+      "idimg3/0a7b8430-0ac0-49f6-9188-b19cef891605.jpeg",
+      "idimg3/0ad47f78-dece-4ea1-8644-945122a62a17.webp",
+      "idimg3/0ea2a1ec-6f4d-4c50-b5e1-7f9f30335461.webp",
+      "idimg3/16dc705b-562c-4aac-8404-ecfea7a75173.jpeg",
+      "idimg3/497a8515-9f5e-4678-ab13-d8db12624504.webp",
+      "idimg3/4c13f935-4b88-45a9-95c3-e89a24454e7e.webp",
+      "idimg3/540b7d97-ae9f-4ba3-aae5-a0d70a967b9a.jpeg",
+      "idimg3/5ffd6d29-2167-42d7-9dff-c5e1e32f689d.jpeg",
+      "idimg3/609be098-0eea-4099-943b-ff28f183f16c.webp",
+      "idimg3/65e79537-0770-44e0-bff7-1992ac1bcd85.webp",
+      "idimg3/7e1635b5-873c-481d-9941-68326fe89dab.webp",
+      "idimg3/8088b53c-9128-4fb3-b897-de3f70ea99e6.webp",
+      "idimg3/96a169e0-1b4c-4fd6-9528-8301a0b19714.jpeg",
+      "idimg3/98eef526-dd28-4424-a891-4952cdcd8752.jpeg"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "3 Bed Apartment",
+    "price": "KSh 250,000/Month",
+    "location": "3 Bed Apartment with En Suite at Riverside Drive",
+    "bedrooms": "3",
+    "bathrooms": "4",
+    "area": "N/A",
+    "property_type": "Apartment",
+    "transaction_type": "Rent",
+    "images": [
+      "idimg4/09f69bd1-6ad0-441f-9b6a-020ec28f8a3b.jpg",
+      "idimg4/1b7bf1f9-bd38-49e4-86c3-2605dcee1e3c.jpg",
+      "idimg4/41e80f48-48ea-43f3-a0a1-18ea8d0a7976.jpg",
+      "idimg4/647663c1-3fff-4cfc-8953-b898352fc698.jpg",
+      "idimg4/8deeb977-76b9-40a0-8d99-b683caae0d13.jpg",
+      "idimg4/9106ec09-21ca-4c2c-834f-0c2c52e3504c.jpg",
+      "idimg4/b43950f4-60de-4cb0-8919-c57112be5abc.jpg",
+      "idimg4/b8b28ad1-d4a3-47d9-b1f3-f33c8ada34b3.jpg",
+      "idimg4/cf4f0381-3f0f-4ad0-ad8f-e3652cb1cfb4.jpg",
+      "idimg4/d66aa6b7-5dcb-462e-9ae5-fe6806d06b71.jpg"
+    ]
+    
+  },
+
+   {
+    "id": 5,
+    "title": "3 Bed Apartment",
+    "price": "KSh 250,000/Month",
+    "location": "2 Bed Apartment with En Suite at Argwins Kodhek",
+    "bedrooms": "2",
+    "bathrooms": "2",
+    "area": "122 sqm",
+    "property_type": "Apartment",
+    "transaction_type": "Rent",
+    "images": [
+      "idimg5/4e00cda0-8533-4947-87c5-c9362f50e8b0.webp",
+      "idimg5/58cca5ed-63e8-41ea-8329-387ba801a321.webp",
+      "idimg5/6834a99f-25c2-4b6a-a5ba-0cf823e074ed.webp",
+      "idimg5/80dac0ce-b751-493b-853d-25329276efef.webp",
+      "idimg5/d822cc07-8ed5-40aa-9178-0cec60356b75.webp",
+      "idimg5/eb8b9477-a160-4b97-aed8-b7dac26865be.webp",
+      "idimg5/fa74cf25-0371-4bbc-b671-5b09b48f6dea.jpeg"
+    ]
+    
+  }
+]
