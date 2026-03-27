@@ -1,0 +1,14 @@
+{
+  "base_url": "https://www.buyrentkenya.com",
+  "delay_between_requests": 1.5,
+  "max_retries": 3,
+  "timeout": 30,
+  "download_images": true,
+  "max_listings_per_run": 100,
+  "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+  "output_directory": "buyrentkenya_data",
+  "image_quality": 85,
+  "validate_data": true,
+  "remove_duplicates": true,
+  "log_level": "INFO"
+}

@@ -1,0 +1,58 @@
+BUYRENTKENYA SCRAPER - COMPREHENSIVE REPORT
+==================================================
+
+Generated: 2025-09-16 11:56:28
+
+DATA SUMMARY:
+--------------------
+Property Listings: 7
+Real Estate Projects: 1
+Articles: 1
+Estate Agents: 1
+Total Items: 10
+
+PROPERTY ANALYSIS:
+--------------------
+Property Types:
+  House: 3
+  Townhouse: 3
+  Villa: 1
+
+Transaction Types:
+  Rent: 1
+  Sale: 6
+
+Top Locations:
+  4 Bed Townhouse with En Suite : 2
+  5 Bed House with En Suite at K: 1
+  4 Bed Villa with En Suite at L: 1
+  2 Bed House with En Suite at K: 1
+  4 Bed House with En Suite at R: 1
+
+SAMPLE PROPERTY LISTINGS:
+------------------------------
+1. 4 Bedroom Property
+   Price: KSh 78,000,000
+   Type: Townhouse
+   URL: https://www.buyrentkenya.com/listings/4-bedroom-townhouse-for-sale-spring-valley-3844840
+
+2. 5 Bedroom Property
+   Price: KSh 22,000,000
+   Type: House
+   URL: https://www.buyrentkenya.com/listings/5-bedroom-house-for-sale-kikuyu-town-3843680
+
+3. 4 Bedroom Property
+   Price: KSh 135,000,000
+   Type: Villa
+   URL: https://www.buyrentkenya.com/listings/4-bedroom-villa-for-sale-loresho-3842712
+
+4. 2 Bedroom Property
+   Price: KSh 140,000 / month
+   Type: House
+   URL: https://www.buyrentkenya.com/listings/2-bedroom-house-for-rent-karen-3843889
+
+5. 4 Bedroom Property
+   Price: KSh 32,450,000
+   Type: House
+   URL: https://www.buyrentkenya.com/listings/4-bedroom-house-for-sale-kiambu-road-3845280
+
